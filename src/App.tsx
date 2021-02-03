@@ -1,13 +1,16 @@
 import React from 'react';
 // import logo from './logo.svg';
-import './App.css';
+// import {SignIn} from "./pages/SignIn";
+import SignUp from "./pages/SignUp";
 
-import { SwitchControl } from "./components/SwitchControl";
+// import { SwitchControl } from "./components/SwitchControl";
 
 function App() {
   return (
     <div className="App">
-        <SwitchControl thingId="esp8266" />
+        {/*<SwitchControl thingId="esp8266" />*/}
+        {/*<SignIn/>*/}
+        <SignUp/>
     </div>
   );
 }
