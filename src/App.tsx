@@ -8,12 +8,15 @@ import {
     Route,
 } from "react-router-dom";
 
-// import { SwitchControl } from "./components/SwitchControl";
+import { SwitchControl } from "./components/SwitchControl";
 // {/*<SwitchControl thingId="esp8266" />*/}
 function App() {
     return (
         <Router>
             <Switch>
+                <Route path='/switch'>
+                    <SwitchControl thingId="esp8266" />
+                </Route>
                 <Route path='/register'>
                     <SignUp />
                 </Route>
