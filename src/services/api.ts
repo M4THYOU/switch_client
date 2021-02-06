@@ -22,6 +22,19 @@ export function getReq(path: string) {
     });
 }
 
+export function postReq(path: string, payload: {}) {
+    const url = buildUrl(path);
+    return fetch(url, {
+        method: 'POST',
+        headers: {...BASE_HEADERS},
+        body: JSON.stringify(payload)
+    }).then(data => {
+        return data.json();
+    }).catch(e => {
+        console.error(e);
+    });
+}
+
 export function patchReq(path: string, payload: {}) {
     const url = buildUrl(path);
     return fetch(url, {

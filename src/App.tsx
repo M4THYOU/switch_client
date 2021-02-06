@@ -9,20 +9,16 @@ import {
 } from "react-router-dom";
 
 import { SwitchControl } from "./components/SwitchControl";
-// {/*<SwitchControl thingId="esp8266" />*/}
+import {PleaseConfirm} from "./pages/PleaseConfirm";
+import {PATH_CONFIRM_EMAIL, PATH_LOGIN, PATH_REGISTER} from "./services/routePaths";
 function App() {
     return (
         <Router>
             <Switch>
-                <Route path='/switch'>
-                    <SwitchControl thingId="esp8266" />
-                </Route>
-                <Route path='/register'>
-                    <SignUp />
-                </Route>
-                <Route path='/login'>
-                    <SignIn />
-                </Route>
+                <Route path='/switch'><SwitchControl thingId="esp8266" /></Route>
+                <Route path={PATH_REGISTER}><SignUp /></Route>
+                <Route path={PATH_LOGIN}><SignIn /></Route>
+                <Route path={PATH_CONFIRM_EMAIL}><PleaseConfirm /></Route>
             </Switch>
         </Router>
     );

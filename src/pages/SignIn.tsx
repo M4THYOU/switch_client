@@ -1,5 +1,4 @@
-import React, {FC, useEffect} from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import React, {FC, useState} from "react";
 import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
@@ -13,32 +12,38 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import {Copyright} from "../components/Copyright";
-
-const useStyles = makeStyles((theme) => ({
-    paper: {
-        marginTop: theme.spacing(8),
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
-    avatar: {
-        margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main,
-    },
-    form: {
-        width: '100%', // Fix IE 11 issue.
-        marginTop: theme.spacing(1),
-    },
-    submit: {
-        margin: theme.spacing(3, 0, 2),
-    },
-}));
+import {mainStyles} from "../styles/main";
+import {PATH_CONFIRM_EMAIL, PATH_REGISTER} from "../services/routePaths";
+import {login, register, validateEmail} from "../services/auth";
+import {LoadingSpinner} from "../components/LoadingSpinner";
+import {useHistory} from "react-router";
 
 export const SignIn: FC = () => {
-    const classes = useStyles();
+    const classes = mainStyles();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    let history = useHistory();
+
+    function handleSubmit(e: any) {
+        e.preventDefault();
+        if (!email || !validateEmail(email)) {
+            alert('Please enter a valid email.');
+            return;
+        } else if (!password) {
+            alert('Please enter your password.');
+            return;
+        }
+        setIsLoading(true);
+        login(email, password).then((res: any) => {
+            setIsLoading(false);
+            console.log(res.headers['Authorization']);
+        });
+    }
 
     return (
         <Container component="main" maxWidth="xs">
+            <LoadingSpinner isShowing={isLoading}/>
             <CssBaseline />
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>
@@ -47,7 +52,7 @@ export const SignIn: FC = () => {
                 <Typography component="h1" variant="h5">
                     Sign in
                 </Typography>
-                <form className={classes.form} noValidate>
+                <form className={classes.form} onSubmit={handleSubmit} noValidate>
                     <TextField
                         variant="outlined"
                         margin="normal"
@@ -58,6 +63,7 @@ export const SignIn: FC = () => {
                         name="email"
                         autoComplete="email"
                         autoFocus
+                        onChange={(e) => setEmail(e.target.value)}
                     />
                     <TextField
                         variant="outlined"
@@ -69,6 +75,7 @@ export const SignIn: FC = () => {
                         type="password"
                         id="password"
                         autoComplete="current-password"
+                        onChange={(e) => setPassword(e.target.value)}
                     />
                     <FormControlLabel
                         control={<Checkbox value="remember" color="primary" />}
@@ -90,7 +97,7 @@ export const SignIn: FC = () => {
                             </Link>
                         </Grid>
                         <Grid item>
-                            <Link href="#" variant="body2">
+                            <Link href={PATH_REGISTER} variant="body2">
                                 {"Don't have an account? Sign Up"}
                             </Link>
                         </Grid>
