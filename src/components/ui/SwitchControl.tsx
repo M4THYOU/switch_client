@@ -1,6 +1,6 @@
 import React, {FC, useEffect, useMemo, useRef, useState} from "react";
-import {getState, setState} from "../services/switch";
-import {boolToThingState, ThingState, thingStateToBool} from "../utils/enums";
+import {getState, setState} from "../../services/switch";
+import {boolToThingState, ThingState, thingStateToBool} from "../../utils/enums";
 
 interface ISwitchState {
     on: ThingState

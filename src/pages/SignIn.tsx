@@ -11,11 +11,11 @@ import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import {Copyright} from "../components/Copyright";
+import {Copyright} from "../components/ui/Copyright";
 import {mainStyles} from "../styles/main";
-import {PATH_CONFIRM_EMAIL, PATH_REGISTER} from "../services/routePaths";
-import {login, register, validateEmail} from "../services/auth";
-import {LoadingSpinner} from "../components/LoadingSpinner";
+import {PATH_CONFIRM_EMAIL, PATH_HOME, PATH_REGISTER} from "../services/routePaths";
+import {login, validateEmail} from "../services/auth";
+import {LoadingSpinner} from "../components/ui/LoadingSpinner";
 import {useHistory} from "react-router";
 
 export const SignIn: FC = () => {
@@ -37,7 +37,9 @@ export const SignIn: FC = () => {
         setIsLoading(true);
         login(email, password).then((res: any) => {
             setIsLoading(false);
-            console.log(res.headers['Authorization']);
+            if (!!res) {
+                history.push(PATH_HOME);
+            }
         });
     }
 

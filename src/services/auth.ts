@@ -39,7 +39,6 @@ export function login(email: string, password: string) {
             password
         }
     };
-    console.log(payload.user.email, payload.user.password);
     const url = AUTH_URL + 'login';
     return fetch(url, {
         method: 'POST',
@@ -48,6 +47,8 @@ export function login(email: string, password: string) {
     }).then(response => {
         const token = response.headers.get('Authorization');
         if (!!token) {
+            localStorage.setItem('jwt', token);
+            console.log(token);
             return response;
         } else {
             console.error('Something went wrong...');
@@ -56,4 +57,20 @@ export function login(email: string, password: string) {
     }).catch(e => {
         console.error(e);
     });
+}
+
+export function isAuthenticated() {
+    const url = AUTH_URL + 'ping-auth';
+    const token = localStorage.getItem('jwt') || 'Bearer';
+    return fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token
+        }
+    }).then(resp => {
+        return +resp.status === 200;
+    }).catch(e => {
+        console.error(e);
+    })
 }

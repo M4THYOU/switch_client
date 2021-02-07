@@ -11,11 +11,11 @@ import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import {Copyright} from "../components/Copyright";
+import {Copyright} from "../components/ui/Copyright";
 import {register, validateEmail} from "../services/auth";
 import {mainStyles} from "../styles/main";
 import {PATH_CONFIRM_EMAIL, PATH_LOGIN} from "../services/routePaths";
-import {LoadingSpinner} from "../components/LoadingSpinner";
+import {LoadingSpinner} from "../components/ui/LoadingSpinner";
 import {Redirect, useHistory} from "react-router";
 
 export default function SignUp() {

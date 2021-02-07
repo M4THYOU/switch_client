@@ -3,7 +3,7 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import {Copyright} from "../components/Copyright";
+import {Copyright} from "../components/ui/Copyright";
 import {mainStyles} from "../styles/main";
 
 export const PleaseConfirm: FC = () => {
