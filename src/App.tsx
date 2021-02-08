@@ -16,8 +16,11 @@ function App() {
     return (
         <Router>
             <Switch>
+                {/* Auth required */}
                 <Route exact path={PATH_HOME} component={Dashboard} />
                 <Route exact path='/switch'><SwitchControl thingId="esp8266" /></Route>
+
+                {/* Auth not required */}
                 <Route exact path={PATH_REGISTER} component={SignUp} />
                 <Route exact path={PATH_LOGIN} component={SignIn} />
                 <Route exact path={PATH_CONFIRM_EMAIL} component={PleaseConfirm} />
