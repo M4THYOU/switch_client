@@ -11,22 +11,18 @@ import {
 import { SwitchControl } from "./components/ui/SwitchControl";
 import {PleaseConfirm} from "./pages/PleaseConfirm";
 import {PATH_CONFIRM_EMAIL, PATH_HOME, PATH_LOGIN, PATH_REGISTER} from "./services/routePaths";
-import PrivateRoute from "./components/PrivateRoute";
-import {ProvideAuth} from "./hooks/use-auth";
 import {Dashboard} from "./pages/Dashboard";
 function App() {
     return (
-        <ProvideAuth>
         <Router>
             <Switch>
-                <PrivateRoute component={Dashboard} exact path={PATH_HOME} />
+                <Route exact path={PATH_HOME} component={Dashboard} />
                 <Route exact path='/switch'><SwitchControl thingId="esp8266" /></Route>
                 <Route exact path={PATH_REGISTER} component={SignUp} />
                 <Route exact path={PATH_LOGIN} component={SignIn} />
                 <Route exact path={PATH_CONFIRM_EMAIL} component={PleaseConfirm} />
             </Switch>
         </Router>
-        </ProvideAuth>
     );
 }
 

@@ -1,55 +1,25 @@
-import {useState, useContext, createContext, FC, ReactNode} from "react";
-import {login, pingAuth} from "../services/auth";
+import {useEffect} from "react";
+import {useHistory} from "react-router";
+import {PATH_LOGIN} from "../services/routePaths";
 
-interface IAuthContext {
-    signIn: (...args: any[]) => Promise<any>;
-    checkIsAuth: () => Promise<boolean>;
-}
-
-const authContext = createContext<IAuthContext>({
-    signIn: () => Promise.resolve(),
-    checkIsAuth: () => Promise.resolve(false),
-});
-
-export const ProvideAuth: FC<{ children: ReactNode }> = ({ children }) => {
-    const auth = useProvideAuth();
-    return (
-        <authContext.Provider value={auth}>
-            {children}
-        </authContext.Provider>
-    );
-}
-
-export function useAuth() {
-    return useContext(authContext);
-}
-
-function useProvideAuth() {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-    const signIn = (email: string, password: string) => {
-        console.log(email, password);
-        return login(email, password).then(result => {
-            setIsAuthenticated(true);
-            return result;
-        })
-    };
-
-    const checkIsAuth = async () => {
-        const hasJwt = !!localStorage.getItem('jwt');
-        if (isAuthenticated && hasJwt) {
-            return isAuthenticated;
-        } else if (hasJwt) {
-            // hit the ping-auth endpoint.
-            const isAuth = await pingAuth();
-            setIsAuthenticated(isAuth);
-            return isAuth;
-        }
-        return false;
-    };
-
-    return {
-        signIn,
-        checkIsAuth,
-    };
+export function useProvideAuth() {
+    let history = useHistory();
+    useEffect(() => {
+        const AUTH_URL = process.env.REACT_APP_AUTH_URL || '';
+        const url = AUTH_URL + 'ping-auth';
+        const token = localStorage.getItem('jwt') || 'Bearer';
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            }
+        }).then(resp => {
+            if (+resp.status !== 200) {
+                history.push(PATH_LOGIN)
+            }
+        }).catch(e => {
+            console.error(e);
+        });
+    }, []);
 }

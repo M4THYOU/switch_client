@@ -58,21 +58,3 @@ export function login(email: string, password: string): Promise<any> {
         console.error(e);
     });
 }
-
-export async function pingAuth(): Promise<boolean> {
-    const url = AUTH_URL + 'ping-auth';
-    const token = localStorage.getItem('jwt') || 'Bearer';
-    let isAuth = false;
-    await fetch(url, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': token
-        }
-    }).then(resp => {
-        isAuth = +resp.status === 200;
-    }).catch(e => {
-        console.error(e);
-    });
-    return isAuth;
-}

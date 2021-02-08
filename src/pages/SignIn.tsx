@@ -14,17 +14,15 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import {Copyright} from "../components/ui/Copyright";
 import {mainStyles} from "../styles/main";
 import {PATH_HOME, PATH_REGISTER} from "../services/routePaths";
-import {validateEmail} from "../services/auth";
+import {login, validateEmail} from "../services/auth";
 import {LoadingSpinner} from "../components/ui/LoadingSpinner";
 import {useHistory} from "react-router";
-import {useAuth} from "../hooks/use-auth";
 
 export const SignIn: FC = () => {
     const classes = mainStyles();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const auth = useAuth();
     let history = useHistory();
 
     function handleSubmit(e: any) {
@@ -38,12 +36,12 @@ export const SignIn: FC = () => {
         }
 
         setIsLoading(true);
-        auth.signIn(email, password).then(res => {
+        login(email, password).then(res => {
             setIsLoading(false);
             if (!!res) {
                 history.push(PATH_HOME);
             }
-        });
+        })
     }
 
     return (

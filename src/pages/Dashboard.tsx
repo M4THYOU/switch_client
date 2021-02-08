@@ -22,6 +22,7 @@ import {Chart} from '../components/ui/dashboard/Chart';
 import {Deposits} from '../components/ui/dashboard/Deposits';
 import {Orders} from '../components/ui/dashboard/Orders';
 import {Copyright} from "../components/ui/Copyright";
+import {useProvideAuth} from "../hooks/use-auth";
 
 const drawerWidth = 240;
 
@@ -105,8 +106,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const Dashboard: FC = () => {
+    useProvideAuth();
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
+
     const handleDrawerOpen = () => {
         setOpen(true);
     };
