@@ -32,7 +32,7 @@ export function register(first_name: string, last_name: string, email: string, p
     });
 }
 
-export function login(email: string, password: string) {
+export function login(email: string, password: string): Promise<any> {
     const payload = {
         'user': {
             email,
@@ -59,18 +59,20 @@ export function login(email: string, password: string) {
     });
 }
 
-export function isAuthenticated() {
+export async function pingAuth(): Promise<boolean> {
     const url = AUTH_URL + 'ping-auth';
     const token = localStorage.getItem('jwt') || 'Bearer';
-    return fetch(url, {
+    let isAuth = false;
+    await fetch(url, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': token
         }
     }).then(resp => {
-        return +resp.status === 200;
+        isAuth = +resp.status === 200;
     }).catch(e => {
         console.error(e);
-    })
+    });
+    return isAuth;
 }

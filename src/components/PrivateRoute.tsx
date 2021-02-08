@@ -4,7 +4,6 @@ import {Redirect} from "react-router";
 import {useAuth} from "../hooks/use-auth";
 import {RouteComponentProps, RouteProps} from "react-router/ts4.0";
 
-// export const PrivateRoute: FC<{ component: Component, exact: boolean, path: string }> = ({ component, exact, path }) => {
 const PrivateRoute: FC<RouteProps> = ({ component: Component, ...rest }) => {
     let auth = useAuth();
     if (!Component) {
@@ -14,7 +13,7 @@ const PrivateRoute: FC<RouteProps> = ({ component: Component, ...rest }) => {
     return (
         <Route
             {...rest}
-            render={(props: RouteComponentProps<{}>) => !!auth.user ? (<Component {...props} />) : (<Redirect to={{ pathname: '/login', state: { from: props.location } }} />)}
+            render={(props: RouteComponentProps<{}>) => auth.checkIsAuth() ? (<Component {...props} />) : (<Redirect to={{ pathname: '/login', state: { from: props.location } }} />)}
 
             // render={props =>
             //     !!auth.user ? (

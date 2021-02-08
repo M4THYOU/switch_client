@@ -1,32 +1,22 @@
 import {useState, useContext, createContext, FC, ReactNode} from "react";
+import {login, pingAuth} from "../services/auth";
 
-const fakeAuth = {
-    isAuthenticated: false,
-    signin(cb: (...args: any[]) => void) {
-        fakeAuth.isAuthenticated = true;
-        setTimeout(cb, 100); // fake async
-    },
-    signout(cb: (...args: any[]) => void) {
-        fakeAuth.isAuthenticated = false;
-        setTimeout(cb, 100);
-    }
-};
-
-interface test {
-    user: string;
-    signin: (...args: any[]) => void;
-    signout: (...args: any[]) => void;
+interface IAuthContext {
+    signIn: (...args: any[]) => Promise<any>;
+    checkIsAuth: () => Promise<boolean>;
 }
 
-const authContext = createContext<test>({user: '', signin: () => {}, signout: () => {}});
+const authContext = createContext<IAuthContext>({
+    signIn: () => Promise.resolve(),
+    checkIsAuth: () => Promise.resolve(false),
+});
 
-// ReactNode
 export const ProvideAuth: FC<{ children: ReactNode }> = ({ children }) => {
     const auth = useProvideAuth();
     return (
         <authContext.Provider value={auth}>
             {children}
-            </authContext.Provider>
+        </authContext.Provider>
     );
 }
 
@@ -35,25 +25,31 @@ export function useAuth() {
 }
 
 function useProvideAuth() {
-    const [user, setUser] = useState('');
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-    const signin = (cb: (...args: any[]) => void) => {
-        return fakeAuth.signin(() => {
-            setUser('user');
-            cb();
-        });
+    const signIn = (email: string, password: string) => {
+        console.log(email, password);
+        return login(email, password).then(result => {
+            setIsAuthenticated(true);
+            return result;
+        })
     };
 
-    const signout = (cb: (...args: any[]) => void) => {
-        return fakeAuth.signout(() => {
-            setUser('');
-            cb();
-        });
+    const checkIsAuth = async () => {
+        const hasJwt = !!localStorage.getItem('jwt');
+        if (isAuthenticated && hasJwt) {
+            return isAuthenticated;
+        } else if (hasJwt) {
+            // hit the ping-auth endpoint.
+            const isAuth = await pingAuth();
+            setIsAuthenticated(isAuth);
+            return isAuth;
+        }
+        return false;
     };
 
     return {
-        user,
-        signin,
-        signout
+        signIn,
+        checkIsAuth,
     };
 }
