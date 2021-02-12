@@ -16,22 +16,27 @@ export function getReq(path: string) {
     return fetch(url, {
         headers: {...BASE_HEADERS}
     }).then(data => {
-        return data.json();
-    }).catch(e => {
-        console.error(e);
+        if (data.status === 200) {
+            return data.json();
+        } else {
+            throw new Error(data.status.toString(10));
+        }
     });
 }
 
 export function postReq(path: string, payload: {}) {
     const url = buildUrl(path);
+    const token = localStorage.getItem('jwt') || 'Bearer';
     return fetch(url, {
         method: 'POST',
-        headers: {...BASE_HEADERS},
+        headers: {...BASE_HEADERS, 'Authorization': token},
         body: JSON.stringify(payload)
     }).then(data => {
-        return data.json();
-    }).catch(e => {
-        console.error(e);
+        if (data.status === 200) {
+            return data.json();
+        } else {
+            throw new Error(data.status.toString(10));
+        }
     });
 }
 
@@ -42,8 +47,10 @@ export function patchReq(path: string, payload: {}) {
         headers: {...BASE_HEADERS},
         body: JSON.stringify(payload)
     }).then(data => {
-        return data.json();
-    }).catch(e => {
-        console.error(e);
+        if (data.status === 200) {
+            return data.json();
+        } else {
+            throw new Error(data.status.toString(10));
+        }
     });
 }
