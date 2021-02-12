@@ -1,4 +1,6 @@
 // The api library is not used here, auth routes do not follow the api routing/url format.
+import {API_AUTH_LOGIN, API_AUTH_SIGNUP} from "./apiRoutes";
+
 const AUTH_URL = process.env.REACT_APP_AUTH_URL || '';
 
 export function validateEmail(email: string) {
@@ -15,7 +17,7 @@ export function register(first_name: string, last_name: string, email: string, p
             password
         }
     };
-    const url = AUTH_URL + 'signup';
+    const url = AUTH_URL + API_AUTH_SIGNUP;
     return fetch(url, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -39,7 +41,7 @@ export function login(email: string, password: string): Promise<any> {
             password
         }
     };
-    const url = AUTH_URL + 'login';
+    const url = AUTH_URL + API_AUTH_LOGIN;
     return fetch(url, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},

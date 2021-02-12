@@ -14,7 +14,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import {Copyright} from "../components/ui/Copyright";
 import {mainStyles} from "../styles/main";
 import {PATH_HOME, PATH_REGISTER} from "../services/routePaths";
-import {login, validateEmail} from "../services/auth";
+import {login, validateEmail} from "../services/api/auth";
 import {LoadingSpinner} from "../components/ui/LoadingSpinner";
 import {useHistory} from "react-router";
 

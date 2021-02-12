@@ -116,6 +116,17 @@ export const Dashboard: FC = () => {
         setOpen(false);
     };
 
+    function getPageTitle() {
+        switch (dashboardPage) {
+            case DashboardPage.MAIN:
+                return 'Dashboard'
+            case DashboardPage.NEW_FAMILY:
+                return 'Add a new Family'
+            case DashboardPage.FAMILY:
+                return 'TEMP'
+        }
+    }
+
     function renderPage() {
         switch (dashboardPage) {
             case DashboardPage.MAIN:
@@ -127,6 +138,7 @@ export const Dashboard: FC = () => {
         }
     }
     const curPage = useMemo(() => renderPage(), [dashboardPage]);
+    const curPageTitle = useMemo(() => getPageTitle(), [dashboardPage]);
 
     return (
         <div className={classes.root}>
@@ -143,7 +155,7 @@ export const Dashboard: FC = () => {
                         <MenuIcon />
                     </IconButton>
                     <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-                        Dashboard
+                        { curPageTitle }
                     </Typography>
                     <IconButton color="inherit">
                         <Badge badgeContent={4} color="secondary">

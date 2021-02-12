@@ -10,6 +10,7 @@ import List from "@material-ui/core/List";
 import {Collapse} from "@material-ui/core";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {DashboardPage} from "../../../utils/enums";
+import {postReq} from "../../../services/api/api";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -31,6 +32,11 @@ export const MainSideList: FC<{ handleLinkClick: (page: DashboardPage) => void }
     const handleClick = () => {
         setOpen(!open);
     };
+
+    const handleNewFamily = () => {
+        console.log('create a new fam!');
+        // postReq()
+    }
 
     return (
         <List>
@@ -54,7 +60,7 @@ export const MainSideList: FC<{ handleLinkClick: (page: DashboardPage) => void }
                         {/*    <ListItemText primary="Starred" />*/}
                         {/*</ListItem>*/}
 
-                        <ListItem button className={classes.nested} divider={true} onClick={() => handleLinkClick(DashboardPage.NEW_FAMILY)}>
+                        <ListItem button className={classes.nested} divider={true} onClick={handleNewFamily}>
                             <ListItemIcon>
                                 <AddIcon />
                             </ListItemIcon>
