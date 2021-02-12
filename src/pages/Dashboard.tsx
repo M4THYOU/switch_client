@@ -1,28 +1,26 @@
-import React, {FC} from 'react';
+import React, {FC, useMemo} from 'react';
 import clsx from 'clsx';
-import { makeStyles } from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
 import Box from '@material-ui/core/Box';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
 import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import { mainListItems, secondaryListItems } from '../components/ui/dashboard/listItems';
-import {Chart} from '../components/ui/dashboard/Chart';
-import {Deposits} from '../components/ui/dashboard/Deposits';
-import {Orders} from '../components/ui/dashboard/Orders';
+import {MainSideList} from '../components/ui/dashboard/MainSideList';
 import {Copyright} from "../components/ui/Copyright";
 import {useProvideAuth} from "../hooks/use-auth";
+import {DashboardPage} from "../utils/enums";
+import {DashboardMain} from "./dashboard/DashboardMain";
+import {DashboardNewFamily} from "./dashboard/DashboardNewFamily";
+import {DashboardFamily} from "./dashboard/DashboardFamily";
 
 const drawerWidth = 240;
 
@@ -109,6 +107,7 @@ export const Dashboard: FC = () => {
     useProvideAuth();
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
+    const [dashboardPage, setDashboardPage] = React.useState(DashboardPage.MAIN);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -116,7 +115,18 @@ export const Dashboard: FC = () => {
     const handleDrawerClose = () => {
         setOpen(false);
     };
-    const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+
+    function renderPage() {
+        switch (dashboardPage) {
+            case DashboardPage.MAIN:
+                return <DashboardMain />
+            case DashboardPage.NEW_FAMILY:
+                return <DashboardNewFamily />
+            case DashboardPage.FAMILY:
+                return <DashboardFamily />
+        }
+    }
+    const curPage = useMemo(() => renderPage(), [dashboardPage]);
 
     return (
         <div className={classes.root}>
@@ -155,33 +165,16 @@ export const Dashboard: FC = () => {
                     </IconButton>
                 </div>
                 <Divider />
-                <List>{mainListItems}</List>
-                <Divider />
-                <List>{secondaryListItems}</List>
+                <MainSideList handleLinkClick={setDashboardPage} />
+
+                {/*<Divider />*/}
+                {/*<SecondarySideList />*/}
+
             </Drawer>
             <main className={classes.content}>
                 <div className={classes.appBarSpacer} />
                 <Container maxWidth="lg" className={classes.container}>
-                    <Grid container spacing={3}>
-                        {/* Chart */}
-                        <Grid item xs={12} md={8} lg={9}>
-                            <Paper className={fixedHeightPaper}>
-                                <Chart />
-                            </Paper>
-                        </Grid>
-                        {/* Recent Deposits */}
-                        <Grid item xs={12} md={4} lg={3}>
-                            <Paper className={fixedHeightPaper}>
-                                <Deposits />
-                            </Paper>
-                        </Grid>
-                        {/* Recent Orders */}
-                        <Grid item xs={12}>
-                            <Paper className={classes.paper}>
-                                <Orders />
-                            </Paper>
-                        </Grid>
-                    </Grid>
+                    { curPage }
                     <Box pt={4}>
                         <Copyright />
                     </Box>

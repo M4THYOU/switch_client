@@ -11,3 +11,10 @@ export function boolToThingState(b: boolean): ThingState {
 export function thingStateToBool(s: ThingState): boolean {
     return s === ThingState.ON;
 }
+
+export enum DashboardPage {
+    MAIN = 'MAIN',
+    NEW_FAMILY = 'NEW_FAMILY',
+    FAMILY = 'FAMILY'
+}
+
