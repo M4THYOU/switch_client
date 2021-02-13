@@ -1,4 +1,4 @@
-import React, {FC, useMemo} from 'react';
+import React, {FC, useEffect, useMemo} from 'react';
 import clsx from 'clsx';
 import {makeStyles} from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -21,6 +21,8 @@ import {DashboardPage} from "../utils/enums";
 import {DashboardMain} from "./dashboard/DashboardMain";
 import {DashboardNewFamily} from "./dashboard/DashboardNewFamily";
 import {DashboardFamily} from "./dashboard/DashboardFamily";
+import {createFamily, getFamilies} from "../services/api/family";
+import {IFamily} from "../utils/interfaces";
 
 const drawerWidth = 240;
 
@@ -108,6 +110,32 @@ export const Dashboard: FC = () => {
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
     const [dashboardPage, setDashboardPage] = React.useState(DashboardPage.MAIN);
+    const [families, setFamilies] = React.useState<Array<IFamily>>([]);
+    const [selectedFamily, setSelectedFamily] = React.useState<IFamily | null>(null);
+
+    useEffect(() => {
+        getFamilies().then(res => {
+            const families: Array<IFamily> = res.families;
+            setFamilies(families);
+        }).catch(e => {
+            console.error(e);
+        });
+    }, []);
+
+    const handleNewFamily = () => {
+        createFamily().then(res => {
+            const family: IFamily = res.family;
+            const fams = families.slice();
+            fams.push(family);
+            setFamilies(fams);
+        }).catch(e => {
+            console.error(e);
+        });
+    };
+    const handleFamilyClick = (family: IFamily) => {
+        setSelectedFamily(family);
+        setDashboardPage(DashboardPage.FAMILY);
+    };
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -119,11 +147,11 @@ export const Dashboard: FC = () => {
     function getPageTitle() {
         switch (dashboardPage) {
             case DashboardPage.MAIN:
-                return 'Dashboard'
+                return 'Dashboard';
             case DashboardPage.NEW_FAMILY:
-                return 'Add a new Family'
+                return 'Add a new Family';
             case DashboardPage.FAMILY:
-                return 'TEMP'
+                return !!selectedFamily ? selectedFamily.name : '';
         }
     }
 
@@ -134,11 +162,11 @@ export const Dashboard: FC = () => {
             case DashboardPage.NEW_FAMILY:
                 return <DashboardNewFamily />
             case DashboardPage.FAMILY:
-                return <DashboardFamily />
+                return !!selectedFamily ? <DashboardFamily family={selectedFamily} /> : <></>;
         }
     }
-    const curPage = useMemo(() => renderPage(), [dashboardPage]);
-    const curPageTitle = useMemo(() => getPageTitle(), [dashboardPage]);
+    const curPage = useMemo(() => renderPage(), [dashboardPage, selectedFamily]);
+    const curPageTitle = useMemo(() => getPageTitle(), [dashboardPage, selectedFamily]);
 
     return (
         <div className={classes.root}>
@@ -177,7 +205,12 @@ export const Dashboard: FC = () => {
                     </IconButton>
                 </div>
                 <Divider />
-                <MainSideList handleLinkClick={setDashboardPage} />
+
+                <MainSideList handleLinkClick={setDashboardPage}
+                              handleFamilyClick={handleFamilyClick}
+                              handleNewFamily={handleNewFamily}
+                              families={families}
+                />
 
                 {/*<Divider />*/}
                 {/*<SecondarySideList />*/}
