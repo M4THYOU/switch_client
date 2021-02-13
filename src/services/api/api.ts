@@ -11,10 +11,15 @@ function buildUrl(path: string): string {
     return API_URL + API_VERSION + '/' + path;
 }
 
-export function getReq(path: string) {
-    const url = buildUrl(path)
+export function getReq(path: string, isAuth = false) {
+    const url = buildUrl(path);
+    let headers: any = {...BASE_HEADERS};
+    if (isAuth) {
+        const token = localStorage.getItem('jwt') || 'Bearer';
+        headers = {...BASE_HEADERS, 'Authorization': token};
+    }
     return fetch(url, {
-        headers: {...BASE_HEADERS}
+        headers,
     }).then(data => {
         if (data.status === 200) {
             return data.json();
@@ -24,12 +29,16 @@ export function getReq(path: string) {
     });
 }
 
-export function postReq(path: string, payload: {}) {
+export function postReq(path: string, payload: {}, isAuth = false) {
     const url = buildUrl(path);
-    const token = localStorage.getItem('jwt') || 'Bearer';
+    let headers: any = {...BASE_HEADERS};
+    if (isAuth) {
+        const token = localStorage.getItem('jwt') || 'Bearer';
+        headers = {...BASE_HEADERS, 'Authorization': token};
+    }
     return fetch(url, {
         method: 'POST',
-        headers: {...BASE_HEADERS, 'Authorization': token},
+        headers,
         body: JSON.stringify(payload)
     }).then(data => {
         if (data.status === 200) {
