@@ -15,6 +15,7 @@ export function thingStateToBool(s: ThingState): boolean {
 export enum DashboardPage {
     MAIN = 'MAIN',
     NEW_FAMILY = 'NEW_FAMILY',
-    FAMILY = 'FAMILY'
+    FAMILY = 'FAMILY',
+    CLUSTER = 'CLUSTER'
 }
 

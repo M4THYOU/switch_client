@@ -22,7 +22,8 @@ import {DashboardMain} from "./dashboard/DashboardMain";
 import {DashboardNewFamily} from "./dashboard/DashboardNewFamily";
 import {DashboardFamily} from "./dashboard/DashboardFamily";
 import {createFamily, getFamilies} from "../services/api/family";
-import {IFamily} from "../utils/interfaces";
+import {ICluster, IFamily, IThing} from "../utils/interfaces";
+import {DashboardCluster} from "./dashboard/DashboardCluster";
 
 const drawerWidth = 240;
 
@@ -112,6 +113,7 @@ export const Dashboard: FC = () => {
     const [dashboardPage, setDashboardPage] = React.useState(DashboardPage.MAIN);
     const [families, setFamilies] = React.useState<Array<IFamily>>([]);
     const [selectedFamily, setSelectedFamily] = React.useState<IFamily | null>(null);
+    const [selectedCluster, setSelectedCluster] = React.useState<ICluster | null>(null);
 
     useEffect(() => {
         getFamilies().then(res => {
@@ -136,6 +138,10 @@ export const Dashboard: FC = () => {
         setSelectedFamily(family);
         setDashboardPage(DashboardPage.FAMILY);
     };
+    const handleClusterClick = (cluster: ICluster) => {
+        setSelectedCluster(cluster);
+        setDashboardPage(DashboardPage.CLUSTER);
+    };
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -152,17 +158,22 @@ export const Dashboard: FC = () => {
                 return 'Add a new Family';
             case DashboardPage.FAMILY:
                 return !!selectedFamily ? selectedFamily.name : '';
+            case DashboardPage.CLUSTER:
+                const familyS = !!selectedFamily ? (selectedFamily.name + ' > ') : '';
+                const clusterS = !!selectedCluster ? selectedCluster.name : '';
+                return familyS + clusterS;
         }
     }
-
     function renderPage() {
         switch (dashboardPage) {
             case DashboardPage.MAIN:
-                return <DashboardMain />
+                return <DashboardMain />;
             case DashboardPage.NEW_FAMILY:
-                return <DashboardNewFamily />
+                return <DashboardNewFamily />;
             case DashboardPage.FAMILY:
-                return !!selectedFamily ? <DashboardFamily family={selectedFamily} /> : <></>;
+                return !!selectedFamily ? <DashboardFamily family={selectedFamily} handleClusterClick={handleClusterClick} /> : <></>;
+            case DashboardPage.CLUSTER:
+                return !!selectedCluster ? <DashboardCluster cluster={selectedCluster} /> : <></>;
         }
     }
     const curPage = useMemo(() => renderPage(), [dashboardPage, selectedFamily]);
