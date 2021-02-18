@@ -24,6 +24,7 @@ import {DashboardFamily} from "./dashboard/DashboardFamily";
 import {createFamily, getFamilies} from "../services/api/family";
 import {ICluster, IFamily, IThing} from "../utils/interfaces";
 import {DashboardCluster} from "./dashboard/DashboardCluster";
+import {DashboardNewThing} from "./dashboard/DashboardNewThing";
 
 const drawerWidth = 240;
 
@@ -162,6 +163,8 @@ export const Dashboard: FC = () => {
                 const familyS = !!selectedFamily ? (selectedFamily.name + ' > ') : '';
                 const clusterS = !!selectedCluster ? selectedCluster.name : '';
                 return familyS + clusterS;
+            case DashboardPage.NEW_THING:
+                return 'Add a new Thing';
         }
     }
     function renderPage() {
@@ -174,6 +177,8 @@ export const Dashboard: FC = () => {
                 return !!selectedFamily ? <DashboardFamily family={selectedFamily} handleClusterClick={handleClusterClick} /> : <></>;
             case DashboardPage.CLUSTER:
                 return !!selectedCluster ? <DashboardCluster cluster={selectedCluster} /> : <></>;
+            case DashboardPage.NEW_THING:
+                return <DashboardNewThing />;
         }
     }
     const curPage = useMemo(() => renderPage(), [dashboardPage, selectedFamily]);

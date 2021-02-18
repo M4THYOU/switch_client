@@ -16,6 +16,7 @@ export enum DashboardPage {
     MAIN = 'MAIN',
     NEW_FAMILY = 'NEW_FAMILY',
     FAMILY = 'FAMILY',
-    CLUSTER = 'CLUSTER'
+    CLUSTER = 'CLUSTER',
+    NEW_THING = 'NEW_THING',
 }
 

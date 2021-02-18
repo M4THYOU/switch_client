@@ -69,8 +69,6 @@ export const MainSideList: FC<{
                 <Collapse in={open} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
                         { familiesList }
-
-
                         <ListItem button className={classes.nested} divider={true} onClick={handleNewFamily}>
                             <ListItemIcon>
                                 <AddIcon />
@@ -79,6 +77,13 @@ export const MainSideList: FC<{
                         </ListItem>
                     </List>
                 </Collapse>
+
+                <ListItem button onClick={() => handleLinkClick(DashboardPage.NEW_THING)}>
+                    <ListItemIcon>
+                        <AddIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="New Thing"/>
+                </ListItem>
 
                 {/*<ListItem button>*/}
                 {/*    <ListItemIcon>*/}

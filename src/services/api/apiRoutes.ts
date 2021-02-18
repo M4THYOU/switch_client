@@ -10,3 +10,4 @@ export const API_PING_AUTH = 'ping-auth';
 export const API_THING = '/thing/';
 export const API_FAMILY = '/family/';
 export const API_FAMILY_CLUSTERS = '/family/clusters/';
+export const API_CLUSTER = '/cluster/'

@@ -7,6 +7,13 @@ import {getFamilyClusters} from "../../services/api/family";
 import {ClusterBox} from "../../components/ui/dashboard/ClusterBox";
 import {makeStyles} from "@material-ui/core/styles";
 import clsx from "clsx";
+import {Title} from "../../components/ui/dashboard/Title";
+import Link from "@material-ui/core/Link";
+import {Chart} from "../../components/ui/dashboard/Chart";
+import {Deposits} from "../../components/ui/dashboard/Deposits";
+import TextField from '@material-ui/core/TextField';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 
 const customStyles = makeStyles((theme) => ({
     root: {
@@ -17,16 +24,22 @@ const customStyles = makeStyles((theme) => ({
         display: 'flex',
         overflow: 'auto',
         flexDirection: 'column',
-        cursor: 'pointer'
     },
     fixedHeight: {
         height: 240,
+    },
+    fixedHeightNewThing: {
+        height: 200
+    },
+    boxContext: {
+        flex: 1,
     }
 }));
 
 export const DashboardCluster: FC<{ cluster: ICluster }> = ({ cluster }) => {
     const classes = customStyles();
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+    const fixedHeightNewThingPaper = clsx(classes.paper, classes.fixedHeightNewThing);
     const [things, setThings] = React.useState<Array<ICluster>>([]);
 
     useEffect(() => {
@@ -39,7 +52,7 @@ export const DashboardCluster: FC<{ cluster: ICluster }> = ({ cluster }) => {
         // });
     }, []);
 
-    function renderClusters() {
+    function renderThings() {
         return things.map(thing => {
             return (
                 <></>
@@ -51,7 +64,7 @@ export const DashboardCluster: FC<{ cluster: ICluster }> = ({ cluster }) => {
             );
         });
     }
-    const thingBoxes = useMemo(() => renderClusters(), [things]);
+    const thingBoxes = useMemo(() => renderThings(), [things]);
 
     return (
         <div>
@@ -60,6 +73,31 @@ export const DashboardCluster: FC<{ cluster: ICluster }> = ({ cluster }) => {
             <div className={classes.root}>
                 <Grid container spacing={3}>
                     {thingBoxes}
+                    {/* Add a new thing! */}
+                    <Grid item xs={12} md={6} lg={6}>
+                        <Paper className={fixedHeightNewThingPaper}>
+                            <React.Fragment>
+                                <Typography variant="h6" gutterBottom>
+                                    Add New Thing
+                                </Typography>
+                                <Grid container spacing={3}>
+                                    <Grid item xs={12} md={12}>
+                                        <TextField required id="thingName" label="Thing Name" fullWidth autoComplete="thing-name" />
+                                    </Grid>
+                                    <Grid item xs={12} md={12}>
+                                        <TextField
+                                            required
+                                            id="thingPassword"
+                                            label="Password"
+                                            type="password"
+                                            fullWidth
+                                            autoComplete="thing-password"
+                                        />
+                                    </Grid>
+                                </Grid>
+                            </React.Fragment>
+                        </Paper>
+                    </Grid>
                 </Grid>
             </div>
         </div>
