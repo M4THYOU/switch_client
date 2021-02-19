@@ -6,6 +6,7 @@ import Button from "@material-ui/core/Button";
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
 import {makeStyles} from "@material-ui/core/styles";
 import {ICluster} from "../../utils/interfaces";
 import {getClusters} from "../../services/api/cluster";
@@ -13,7 +14,7 @@ import {getClusters} from "../../services/api/cluster";
 const useStyles = makeStyles((theme) => ({
     formControl: {
         margin: theme.spacing(1),
-        minWidth: 120,
+        minWidth: 140,
     },
     selectEmpty: {
         marginTop: theme.spacing(2),
@@ -24,7 +25,7 @@ export const DashboardNewThing: FC = () => {
     const classes = useStyles();
     const [thingName, setThingName] = useState('');
     const [password, setPassword] = useState('');
-    const [curCluster, setCurCluster] = useState<string | ICluster>('');
+    const [curClusterId, setCurClusterId] = useState('');
     const [clusters, setClusters] = useState<Array<ICluster>>([]);
 
     useEffect(() => {
@@ -38,17 +39,8 @@ export const DashboardNewThing: FC = () => {
 
     const manuallySetClusterId = (e: any) => {
         const clusterId = e.target.value;
+        setCurClusterId(clusterId);
         console.log(clusterId);
-        for (let i = 0; i < clusters.length; i++) {
-            const cluster = clusters[i];
-            if (+cluster.id === +clusterId) {
-                console.log(cluster);
-                setCurCluster(cluster);
-                break;
-            }
-        }
-        // TODO
-        // FIGURE OUT WHY THIS CLUSTER ISN'T SETTING!
     }
 
     const addClick = (e: any) => {
@@ -59,8 +51,8 @@ export const DashboardNewThing: FC = () => {
         } else if (!password) {
             alert('Please enter the thing\'s password.');
             return;
-        } else if (curCluster === '') {
-            alert('Please select a cluster for the thing.');
+        } else if (curClusterId === '') {
+            alert('Please select a cluster to add the thing to.');
             return;
         }
 
@@ -76,7 +68,7 @@ export const DashboardNewThing: FC = () => {
 
     function renderClusterItems() {
         return clusters.map((cluster: ICluster) => {
-            return <option key={cluster.id} value={cluster.id}>{cluster.name}</option>
+            return <MenuItem key={cluster.id} value={cluster.id}>{cluster.name}</MenuItem>
         });
     }
     const clusterItems = useMemo(() => renderClusterItems(), [clusters]);
@@ -112,20 +104,15 @@ export const DashboardNewThing: FC = () => {
                     <FormControl className={classes.formControl}>
                         <InputLabel htmlFor="age-native-simple">Cluster</InputLabel>
                         <Select
-                            native
-                            value={curCluster}
+                            value={curClusterId}
                             onChange={manuallySetClusterId}
                             // onChange={(e) => setClusterId(e.target.value)}
-                            inputProps={{
-                                name: 'Cluster',
-                                id: 'age-native-simple',
-                            }}
                         >
-                            <option aria-label="None" value="" />
                             { clusterItems }
                         </Select>
                     </FormControl>
                 </Grid>
+                <Grid item xs={12} sm={6} />
                 <Grid item xs={9} sm={4}>
                     <Button
                         type="submit"
