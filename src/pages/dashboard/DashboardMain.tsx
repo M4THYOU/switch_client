@@ -39,6 +39,7 @@ export const DashboardMain: FC = () => {
 
     return (
         <Grid container spacing={3}>
+            { thingBoxes }
             {/* Chart */}
             <Grid item xs={12} md={8} lg={9}>
                 <Paper className={fixedHeightPaper}>
@@ -57,7 +58,6 @@ export const DashboardMain: FC = () => {
                     <Orders />
                 </Paper>
             </Grid>
-            { thingBoxes }
         </Grid>
     );
 };
