@@ -1,8 +1,8 @@
 import React, {FC} from 'react';
 import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
-import {Title} from './Title';
-import {ICluster} from "../../../utils/interfaces";
+import {IThing} from "../../utils/interfaces";
+import {Title} from "./dashboard/Title";
 
 function preventDefault(e: any) {
     e.preventDefault();
@@ -13,11 +13,11 @@ const useStyles = makeStyles({
     },
 });
 
-export const ClusterBox: FC<{cluster: ICluster}> = ({ cluster }) => {
+export const Thing: FC<{thing: IThing}> = ({ thing }) => {
     const classes = useStyles();
     return (
         <React.Fragment>
-            <Title>{cluster.name}</Title>
+            <Title>{thing.name}</Title>
             <div>
                 <Link color="primary" href="#" onClick={preventDefault}>
                     View

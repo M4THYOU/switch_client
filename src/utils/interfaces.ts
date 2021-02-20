@@ -19,6 +19,10 @@ export interface ICluster {
 }
 
 export interface IThing {
-    //
+    id: number;
+    aws_name: string;
+    name: string;
+    meta: string;
+    is_active: boolean;
 }
 

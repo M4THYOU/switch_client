@@ -10,6 +10,10 @@ import MenuItem from '@material-ui/core/MenuItem';
 import {makeStyles} from "@material-ui/core/styles";
 import {ICluster} from "../../utils/interfaces";
 import {getClusters} from "../../services/api/cluster";
+import {LoadingSpinner} from "../../components/ui/LoadingSpinner";
+import {activateThing} from "../../services/api/switch";
+import {useHistory} from "react-router";
+import {PATH_HOME} from "../../services/routePaths";
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -24,9 +28,11 @@ const useStyles = makeStyles((theme) => ({
 export const DashboardNewThing: FC = () => {
     const classes = useStyles();
     const [thingName, setThingName] = useState('');
-    const [password, setPassword] = useState('');
-    const [curClusterId, setCurClusterId] = useState('');
+    const [thingKey, setThingKey] = useState('');
+    const [clusterGroupId, setClusterGroupId] = useState('');
     const [clusters, setClusters] = useState<Array<ICluster>>([]);
+    const [isLoading, setIsLoading] = useState(false);
+    let history = useHistory();
 
     useEffect(() => {
         getClusters().then(res => {
@@ -38,9 +44,8 @@ export const DashboardNewThing: FC = () => {
     }, []);
 
     const manuallySetClusterId = (e: any) => {
-        const clusterId = e.target.value;
-        setCurClusterId(clusterId);
-        console.log(clusterId);
+        const groupId = e.target.value;
+        setClusterGroupId(groupId);
     }
 
     const addClick = (e: any) => {
@@ -48,33 +53,43 @@ export const DashboardNewThing: FC = () => {
         if (!thingName) {
             alert('Please enter the thing\'s id/name.');
             return;
-        } else if (!password) {
-            alert('Please enter the thing\'s password.');
+        } else if (!thingKey) {
+            alert('Please enter the thing\'s key.');
             return;
-        } else if (curClusterId === '') {
+        } else if (clusterGroupId === '') {
             alert('Please select a cluster to add the thing to.');
             return;
         }
 
-        // setIsLoading(true);
-        // login(email, password).then(res => {
-        //     setIsLoading(false);
-        //     if (!!res) {
-        //         history.push(PATH_HOME);
-        //     }
-        // })
-        console.log(thingName, password);
+        const payload = {
+            name: thingName,
+            key: thingKey,
+            cluster_group_id: clusterGroupId
+        }
+        setIsLoading(true);
+        activateThing(payload).then(res => {
+            setIsLoading(false);
+            if (!!res) {
+                setThingName('');
+                setThingKey('');
+                setClusterGroupId('');
+            }
+        }).catch(e => {
+            console.error(e);
+            setIsLoading(false);
+        });
     };
 
     function renderClusterItems() {
         return clusters.map((cluster: ICluster) => {
-            return <MenuItem key={cluster.id} value={cluster.id}>{cluster.name}</MenuItem>
+            return <MenuItem key={cluster.cluster_group_id} value={cluster.cluster_group_id}>{cluster.name}</MenuItem>
         });
     }
     const clusterItems = useMemo(() => renderClusterItems(), [clusters]);
 
     return (
         <React.Fragment>
+            <LoadingSpinner isShowing={isLoading}/>
             <Typography variant="h6" gutterBottom>
                 Shipping address
             </Typography>
@@ -92,19 +107,19 @@ export const DashboardNewThing: FC = () => {
                 <Grid item xs={12} sm={6}>
                     <TextField
                         required
-                        id="thingPassword"
-                        label="Password"
+                        id="thingKey"
+                        label="Secret Key"
                         type="password"
                         fullWidth
-                        autoComplete="thing-password"
-                        onChange={(e) => setPassword(e.target.value)}
+                        autoComplete="thingKey"
+                        onChange={(e) => setThingKey(e.target.value)}
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <FormControl className={classes.formControl}>
                         <InputLabel htmlFor="age-native-simple">Cluster</InputLabel>
                         <Select
-                            value={curClusterId}
+                            value={clusterGroupId}
                             onChange={manuallySetClusterId}
                             // onChange={(e) => setClusterId(e.target.value)}
                         >

@@ -8,6 +8,7 @@ export const API_PING = 'ping';
 export const API_PING_AUTH = 'ping-auth';
 // /api/{version}/...
 export const API_THING = '/thing/';
+export const API_THING_ACTIVATE = '/thing/activate/';
 export const API_FAMILY = '/family/';
 export const API_FAMILY_CLUSTERS = '/family/clusters/';
 export const API_CLUSTER = '/cluster/'
