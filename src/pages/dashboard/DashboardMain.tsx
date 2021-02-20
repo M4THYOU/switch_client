@@ -7,7 +7,7 @@ import {Orders} from "../../components/ui/dashboard/Orders";
 import clsx from "clsx";
 import {dashboardMainStyles} from "../../styles/main";
 import {IThing} from "../../utils/interfaces";
-import {Thing} from "../../components/ui/Thing";
+import {Thing} from "../../components/ui/things/Thing";
 import {getThings} from "../../services/api/switch";
 
 export const DashboardMain: FC = () => {

@@ -5,7 +5,7 @@ import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import {makeStyles} from "@material-ui/core/styles";
 import clsx from "clsx";
-import {Thing} from "../../components/ui/Thing";
+import {Thing} from "../../components/ui/things/Thing";
 import {getClusterThings} from "../../services/api/cluster";
 
 const customStyles = makeStyles((theme) => ({

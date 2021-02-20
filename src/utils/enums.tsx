@@ -20,3 +20,6 @@ export enum DashboardPage {
     NEW_THING = 'NEW_THING',
 }
 
+export enum ThingType {
+    SWITCH = 1
+}

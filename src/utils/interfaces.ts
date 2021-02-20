@@ -1,3 +1,5 @@
+import {ThingType} from "./enums";
+
 export interface IFamily {
     id: number;
     name: string;
@@ -24,5 +26,6 @@ export interface IThing {
     name: string;
     meta: string;
     is_active: boolean;
+    thing_type_id: ThingType;
 }
 
