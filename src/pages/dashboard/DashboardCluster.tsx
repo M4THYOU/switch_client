@@ -6,6 +6,7 @@ import Paper from "@material-ui/core/Paper";
 import {makeStyles} from "@material-ui/core/styles";
 import clsx from "clsx";
 import {Thing} from "../../components/ui/Thing";
+import {getClusterThings} from "../../services/api/cluster";
 
 const customStyles = makeStyles((theme) => ({
     root: {
@@ -35,12 +36,12 @@ export const DashboardCluster: FC<{ cluster: ICluster }> = ({ cluster }) => {
 
     useEffect(() => {
         console.log('get cluster things');
-        // getFamilyClusters(family.family_group_id).then(res => {
-        //     const clusts: Array<ICluster> = res.clusters;
-        //     setClusters(clusts);
-        // }).catch(e => {
-        //     console.error(e);
-        // });
+        getClusterThings(cluster.cluster_group_id).then(res => {
+            const resThings: Array<IThing> = res.things;
+            setThings(resThings);
+        }).catch(e => {
+            console.error(e);
+        });
     }, []);
 
     function renderThings() {

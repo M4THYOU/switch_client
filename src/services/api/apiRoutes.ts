@@ -12,3 +12,4 @@ export const API_THING_ACTIVATE = '/thing/activate/';
 export const API_FAMILY = '/family/';
 export const API_FAMILY_CLUSTERS = '/family/clusters/';
 export const API_CLUSTER = '/cluster/'
+export const API_CLUSTER_THINGS = '/cluster/things/'

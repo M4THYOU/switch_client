@@ -11,6 +11,10 @@ export function setState(id: string, payload: {}) {
     return patchReq(path, payload);
 }
 
+export function getThings() {
+    return getReq(API_THING, true);
+}
+
 export function activateThing(payload: {}) {
     return postReq(API_THING_ACTIVATE, payload, true);
 }
