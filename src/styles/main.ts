@@ -98,4 +98,7 @@ export const dashboardMainStyles = makeStyles((theme) => ({
     fixedHeight: {
         height: 240,
     },
+    fixedHeightThing: {
+        height: 280
+    }
 }));

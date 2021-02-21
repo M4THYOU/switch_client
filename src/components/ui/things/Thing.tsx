@@ -1,15 +1,8 @@
 import React, {FC, useMemo} from 'react';
-import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import {IThing} from "../../../utils/interfaces";
-import {Title} from "../dashboard/Title";
 import Typography from "@material-ui/core/Typography";
-import {DashboardPage, ThingType} from "../../../utils/enums";
-import {DashboardMain} from "../../../pages/dashboard/DashboardMain";
-import {DashboardNewFamily} from "../../../pages/dashboard/DashboardNewFamily";
-import {DashboardFamily} from "../../../pages/dashboard/DashboardFamily";
-import {DashboardCluster} from "../../../pages/dashboard/DashboardCluster";
-import {DashboardNewThing} from "../../../pages/dashboard/DashboardNewThing";
+import {ThingType} from "../../../utils/enums";
 import {SwitchMain} from "./SwitchMain";
 
 function preventDefault(e: any) {
@@ -19,6 +12,14 @@ const useStyles = makeStyles({
     root: {
         flex: 1,
     },
+    sideBySide: {
+        display: 'flex',
+        flexDirection: 'row',
+    },
+    subtitle: {
+        marginTop: 'auto',
+        marginLeft: 'auto'
+    }
 });
 
 export const Thing: FC<{thing: IThing}> = ({ thing }) => {
@@ -34,7 +35,10 @@ export const Thing: FC<{thing: IThing}> = ({ thing }) => {
 
     return (
         <React.Fragment>
-            <Title>{thing.name}</Title>
+            <div className={classes.sideBySide}>
+                <Typography component="h2" variant="h6" color="primary">{thing.name}</Typography>
+                <Typography component="p" variant="subtitle1" color="textSecondary" className={classes.subtitle}>Switch</Typography>
+            </div>
             { curThing }
         </React.Fragment>
     );
