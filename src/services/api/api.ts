@@ -49,11 +49,16 @@ export function postReq(path: string, payload: {}, isAuth = false) {
     });
 }
 
-export function patchReq(path: string, payload: {}) {
+export function patchReq(path: string, payload: {}, isAuth = false) {
     const url = buildUrl(path);
+    let headers: any = {...BASE_HEADERS};
+    if (isAuth) {
+        const token = localStorage.getItem('jwt') || 'Bearer';
+        headers = {...BASE_HEADERS, 'Authorization': token};
+    }
     return fetch(url, {
         method: 'PATCH',
-        headers: {...BASE_HEADERS},
+        headers,
         body: JSON.stringify(payload)
     }).then(data => {
         if (data.status === 200) {

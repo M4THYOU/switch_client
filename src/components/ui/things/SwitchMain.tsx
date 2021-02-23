@@ -2,13 +2,12 @@ import React, {FC, useEffect, useMemo, useRef, useState} from "react";
 import {getState, setState} from "../../../services/api/switch";
 import {boolToThingState, ThingState, thingStateToBool} from "../../../utils/enums";
 import {IThing} from "../../../utils/interfaces";
-import EmojiObjectsOutlinedIcon from '@material-ui/icons/EmojiObjectsOutlined';
 
 import switchOff from './switch_off.svg';
 import switchOn from './switch_on.svg';
-import {LoadingSpinner} from "../LoadingSpinner";
 import {makeStyles} from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
+import {InPlaceLoadingSpinner} from "../InPlaceLoadingSpinner";
 
 interface ISwitchState {
     on: ThingState
@@ -24,6 +23,9 @@ const useStyles = makeStyles({
         flexDirection: 'row',
         justifyContent: 'space-around',
         marginTop: '1rem'
+    },
+    image: {
+        height: 115
     },
     onButton: {
         // background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
@@ -53,46 +55,38 @@ export const SwitchMain: FC<{ thing: IThing }> = ({ thing }) => {
     const [switchState, setSwitchState] = useState<ISwitchState>({on: ThingState.PENDING});
 
     useEffect(() => {
-        // getState(thingId).then(state => {
-        //     const on: boolean = state.state.on;
-        //     setSwitchState({ on: boolToThingState(on) });
-        //     mounted.current = true;
-        // });
+        getState(thing.aws_name).then(state => {
+            const on: boolean = state.state.on;
+            setSwitchState({ on: boolToThingState(on) });
+            mounted.current = true;
+        }).catch(e => {
+            console.error(e);
+        });
     }, []);
 
     function handleSet(on: ThingState) {
         const payload = {
             on: +thingStateToBool(on)
         };
-        setSwitchState({on});
-        // setState(thingId, payload).then(state => {
-        //     const on: boolean = state.on;
-        //     setSwitchState({on: boolToThingState(on)});
-        // });
+        setSwitchState({on: ThingState.PENDING});
+        setState(thing.aws_name, payload).then(state => {
+            const on: boolean = state.on;
+            setSwitchState({on: boolToThingState(on)});
+        }).catch(e => {
+            console.error(e);
+        });
     }
 
-    function printSwitchState(s: ISwitchState): string {
-        switch (s.on) {
-            case ThingState.OFF:
-                return "OFF";
-            case ThingState.ON:
-                return "ON";
-            default:
-                return "___";
-        }
-    }
     function renderSwitchState() {
         switch (switchState.on) {
             case ThingState.OFF:
-                return <img src={switchOff} className="App-logo" alt="logo" />;
+                return <img src={switchOff} className={classes.image} alt="switch off image" />;
             case ThingState.ON:
-                return <img src={switchOn} className="App-logo" alt="logo" />;
+                return <img src={switchOn} className={classes.image} alt="switch on image" />;
             default:
-                // return <LoadingSpinner isShowing={true} />;
-                return <img src={switchOn} className="App-logo" alt="logo" />;
+                return <InPlaceLoadingSpinner isShowing={true} />;
         }
     }
-    const printState = useMemo(() => printSwitchState(switchState), [ switchState ]);
     const renderState = useMemo(() => renderSwitchState(), [ switchState ])
 
     return (
