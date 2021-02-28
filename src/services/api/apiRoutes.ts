@@ -4,6 +4,7 @@ export const API_AUTH_LOGOUT = 'logout';
 export const API_AUTH_PASSWORD = 'password';
 export const API_AUTH_SIGNUP = 'signup';
 export const API_AUTH_CONFIRMATION = 'confirmation';
+export const API_AUTH_INVITATION = 'invitation';
 export const API_PING = 'ping';
 export const API_PING_AUTH = 'ping-auth';
 // /api/{version}/...

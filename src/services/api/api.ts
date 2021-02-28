@@ -68,3 +68,23 @@ export function patchReq(path: string, payload: {}, isAuth = false) {
         }
     });
 }
+
+export function putReq(path: string, payload: {}, isAuth = false) {
+    const url = buildUrl(path);
+    let headers: any = {...BASE_HEADERS};
+    if (isAuth) {
+        const token = localStorage.getItem('jwt') || 'Bearer';
+        headers = {...BASE_HEADERS, 'Authorization': token};
+    }
+    return fetch(url, {
+        method: 'PUT',
+        headers,
+        body: JSON.stringify(payload)
+    }).then(data => {
+        if (data.status === 200) {
+            return data.json();
+        } else {
+            throw new Error(data.status.toString(10));
+        }
+    });
+}

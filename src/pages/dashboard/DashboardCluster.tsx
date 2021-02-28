@@ -8,6 +8,8 @@ import clsx from "clsx";
 import {Thing} from "../../components/ui/things/Thing";
 import {getClusterThings} from "../../services/api/cluster";
 
+// TODO ADD ALL THAT THING RENDERING FROM THE DASHBOARD IN HERE TOO
+
 const customStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',

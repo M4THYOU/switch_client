@@ -1,5 +1,7 @@
 // The api library is not used here, auth routes do not follow the api routing/url format.
-import {API_AUTH_LOGIN, API_AUTH_SIGNUP} from "./apiRoutes";
+import {API_AUTH_INVITATION, API_AUTH_LOGIN, API_AUTH_SIGNUP} from "./apiRoutes";
+import {putReq} from "./api";
+import {PATH_INVITATION_ACCEPT} from "../routePaths";
 
 const AUTH_URL = process.env.REACT_APP_AUTH_URL || '';
 
@@ -50,11 +52,28 @@ export function login(email: string, password: string): Promise<any> {
         const token = response.headers.get('Authorization');
         if (!!token) {
             localStorage.setItem('jwt', token);
-            console.log(token);
             return response;
         } else {
             console.error('Something went wrong...');
             return null;
+        }
+    }).catch(e => {
+        console.error(e);
+    });
+}
+
+export function confirmInvite(first_name: string, last_name: string, password: string, invitation_token: string) {
+    const payload = {first_name, last_name, password, invitation_token};
+    const url = AUTH_URL + API_AUTH_INVITATION;
+    return fetch(url, {
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(payload)
+    }).then(data => {
+        if (+data.status === 200) {
+            return data.json();
+        } else {
+            throw new Error(data.status.toString(10));
         }
     }).catch(e => {
         console.error(e);
