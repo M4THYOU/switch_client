@@ -1,9 +1,6 @@
 import React, {FC, useEffect, useMemo} from "react";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
-import {Chart} from "../../components/ui/dashboard/Chart";
-import {Deposits} from "../../components/ui/dashboard/Deposits";
-import {Orders} from "../../components/ui/dashboard/Orders";
 import clsx from "clsx";
 import {dashboardMainStyles} from "../../styles/main";
 import {IThing} from "../../utils/interfaces";

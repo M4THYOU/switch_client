@@ -18,6 +18,7 @@ export enum DashboardPage {
     FAMILY = 'FAMILY',
     CLUSTER = 'CLUSTER',
     NEW_THING = 'NEW_THING',
+    INVITE_USER = 'INVITE_USER'
 }
 
 export enum ThingType {

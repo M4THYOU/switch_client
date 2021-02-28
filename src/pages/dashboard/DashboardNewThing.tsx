@@ -1,6 +1,5 @@
 import React, {FC, useEffect, useMemo, useState} from 'react';
 import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from "@material-ui/core/Button";
 import FormControl from '@material-ui/core/FormControl';
@@ -13,7 +12,6 @@ import {getClusters} from "../../services/api/cluster";
 import {LoadingSpinner} from "../../components/ui/LoadingSpinner";
 import {activateThing} from "../../services/api/switch";
 import {useHistory} from "react-router";
-import {PATH_HOME} from "../../services/routePaths";
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -90,9 +88,6 @@ export const DashboardNewThing: FC = () => {
     return (
         <React.Fragment>
             <LoadingSpinner isShowing={isLoading}/>
-            <Typography variant="h6" gutterBottom>
-                Shipping address
-            </Typography>
             <Grid container spacing={3}>
                 <Grid item xs={12} sm={6}>
                     <TextField

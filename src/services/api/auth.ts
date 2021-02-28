@@ -62,6 +62,26 @@ export function login(email: string, password: string): Promise<any> {
     });
 }
 
+export function sendInvite(email: string, family_group_id: number) {
+    const payload = {email, family_group_id};
+    const url = AUTH_URL + API_AUTH_INVITATION;
+    const token = localStorage.getItem('jwt') || 'Bearer';
+    const headers = {'Content-Type': 'application/json', 'Authorization': token};
+    return fetch(url, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(payload)
+    }).then(data => {
+        if (+data.status === 200) {
+            return data.json();
+        } else {
+            throw new Error(data.status.toString(10));
+        }
+    }).catch(e => {
+        console.error(e);
+    });
+}
+
 export function confirmInvite(first_name: string, last_name: string, password: string, invitation_token: string) {
     const payload = {first_name, last_name, password, invitation_token};
     const url = AUTH_URL + API_AUTH_INVITATION;

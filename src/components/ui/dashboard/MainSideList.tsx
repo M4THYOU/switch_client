@@ -4,6 +4,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import AddIcon from '@material-ui/icons/Add';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import GroupWork from "@material-ui/icons/GroupWork";
 import {ExpandLess, ExpandMore} from "@material-ui/icons";
 import List from "@material-ui/core/List";
@@ -83,6 +84,13 @@ export const MainSideList: FC<{
                         <AddIcon />
                     </ListItemIcon>
                     <ListItemText primary="New Thing"/>
+                </ListItem>
+
+                <ListItem button onClick={() => handleLinkClick(DashboardPage.INVITE_USER)}>
+                    <ListItemIcon>
+                        <PersonAddIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Invite"/>
                 </ListItem>
 
                 {/*<ListItem button>*/}

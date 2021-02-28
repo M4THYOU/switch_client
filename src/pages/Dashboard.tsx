@@ -22,9 +22,10 @@ import {DashboardMain} from "./dashboard/DashboardMain";
 import {DashboardNewFamily} from "./dashboard/DashboardNewFamily";
 import {DashboardFamily} from "./dashboard/DashboardFamily";
 import {createFamily, getFamilies} from "../services/api/family";
-import {ICluster, IFamily, IThing} from "../utils/interfaces";
+import {ICluster, IFamily} from "../utils/interfaces";
 import {DashboardCluster} from "./dashboard/DashboardCluster";
 import {DashboardNewThing} from "./dashboard/DashboardNewThing";
+import {DashboardInvite} from "./dashboard/DashboardInvite";
 
 const drawerWidth = 240;
 
@@ -165,6 +166,8 @@ export const Dashboard: FC = () => {
                 return familyS + clusterS;
             case DashboardPage.NEW_THING:
                 return 'Add a new Thing';
+            case DashboardPage.INVITE_USER:
+                return 'Invite a new member to your Family';
         }
     }
     function renderPage() {
@@ -179,6 +182,8 @@ export const Dashboard: FC = () => {
                 return !!selectedCluster ? <DashboardCluster cluster={selectedCluster} /> : <></>;
             case DashboardPage.NEW_THING:
                 return <DashboardNewThing />;
+            case DashboardPage.INVITE_USER:
+                return <DashboardInvite />;
         }
     }
     const curPage = useMemo(() => renderPage(), [dashboardPage, selectedFamily]);
