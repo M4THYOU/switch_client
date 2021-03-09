@@ -2,7 +2,8 @@
 export enum ThingState {
     OFF,
     ON,
-    PENDING
+    PENDING,
+    ERROR
 }
 export function boolToThingState(b: boolean): ThingState {
     return +b;

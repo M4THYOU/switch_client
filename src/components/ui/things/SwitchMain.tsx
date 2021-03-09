@@ -7,6 +7,7 @@ import switchOff from './switch_off.svg';
 import switchOn from './switch_on.svg';
 import {makeStyles} from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
+import RefreshIcon from '@material-ui/icons/Refresh';
 import {InPlaceLoadingSpinner} from "../InPlaceLoadingSpinner";
 
 interface ISwitchState {
@@ -26,6 +27,11 @@ const useStyles = makeStyles({
     },
     image: {
         height: 115
+    },
+    refreshIcon: {
+        height: 115,
+        fontSize: 64,
+        cursor: 'pointer'
     },
     onButton: {
         // background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
@@ -55,14 +61,22 @@ export const SwitchMain: FC<{ thing: IThing }> = ({ thing }) => {
     const [switchState, setSwitchState] = useState<ISwitchState>({on: ThingState.PENDING});
 
     useEffect(() => {
+        tryGetState();
+    }, []);
+
+    const tryGetState = () => {
+        setSwitchState({on: ThingState.PENDING});
         getState(thing.aws_name).then(state => {
+            const thingState = state.state;
+            if (!!thingState.error) { throw new Error(thingState.error) }
             const on: boolean = state.state.on;
             setSwitchState({ on: boolToThingState(on) });
             mounted.current = true;
         }).catch(e => {
+            setSwitchState({on: ThingState.ERROR});
             console.error(e);
         });
-    }, []);
+    };
 
     function handleSet(on: ThingState) {
         const payload = {
@@ -80,11 +94,13 @@ export const SwitchMain: FC<{ thing: IThing }> = ({ thing }) => {
     function renderSwitchState() {
         switch (switchState.on) {
             case ThingState.OFF:
-                return <img src={switchOff} className={classes.image} alt="switch off image" />;
+                return <img src={switchOff} className={classes.image} alt="switch off" />;
             case ThingState.ON:
-                return <img src={switchOn} className={classes.image} alt="switch on image" />;
-            default:
+                return <img src={switchOn} className={classes.image} alt="switch on" />;
+            case ThingState.PENDING:
                 return <InPlaceLoadingSpinner isShowing={true} />;
+            case ThingState.ERROR:
+                return <RefreshIcon className={classes.refreshIcon} onClick={tryGetState} />
         }
     }
     const renderState = useMemo(() => renderSwitchState(), [ switchState ])
